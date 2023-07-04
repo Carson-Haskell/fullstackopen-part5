@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import NewBlog from './components/NewBlog';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
+
+  const newBlogRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -54,6 +57,9 @@ const App = () => {
   const addBlog = async (title, author, url) => {
     try {
       const savedNote = await blogService.create({ title, author, url });
+
+      newBlogRef.current.toggleVisiblity();
+
       setBlogs([...blogs, savedNote]);
 
       notify({
@@ -66,7 +72,6 @@ const App = () => {
   };
 
   const notify = (message) => {
-    console.log(message);
     setStatusMessage(message);
 
     setTimeout(() => setStatusMessage(null), 4000);
@@ -89,7 +94,9 @@ const App = () => {
 
       <button onClick={handleLogout}>Logout</button>
 
-      <NewBlog addBlog={addBlog} />
+      <Togglable buttonLabel="New blog" ref={newBlogRef}>
+        <NewBlog addBlog={addBlog} />
+      </Togglable>
 
       <br />
       <div>

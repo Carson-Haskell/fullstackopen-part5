@@ -17,7 +17,7 @@ const NewBlog = ({ addBlog }) => {
 
   return (
     <div>
-      <h2>Create a New Blog</h2>
+      <h2>Upload new blog</h2>
       <form onSubmit={handleSubmit}>
         <div>
           Title:
