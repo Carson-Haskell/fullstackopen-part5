@@ -22,7 +22,9 @@ const App = () => {
     const loggedUser = window.localStorage.getItem('LoggedInUser');
 
     if (loggedUser) {
-      setUser(JSON.parse(loggedUser));
+      const userJSON = JSON.parse(loggedUser);
+      setUser(userJSON);
+      blogService.setToken(userJSON.token);
     }
   }, []);
 
@@ -97,22 +99,13 @@ const App = () => {
   const deleteBlog = async (id) => {
     const blogToDelete = blogs.find((b) => b.id === id);
 
-    if (blogToDelete.author !== user.name) {
-      notify({
-        type: 'error',
-        content: 'Blog can only be deleted by publisher.',
-      });
-
-      return;
-    }
-
     if (
       window.confirm(
         `Are you sure you want to remove '${blogToDelete.title}' by ${blogToDelete.author}?`,
       )
     ) {
       try {
-        blogService.deleteBlog(id);
+        await blogService.deleteBlog(id);
 
         setBlogs(blogs.filter((b) => b.id !== id));
 
@@ -123,7 +116,7 @@ const App = () => {
       } catch (err) {
         notify({
           type: 'error',
-          content: 'Cannot delete blog',
+          content: 'Only publisher can delete blog',
         });
       }
     }
