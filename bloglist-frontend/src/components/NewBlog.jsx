@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const NewBlog = ({ addBlog }) => {
+const NewBlog = ({ createBlog }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -8,7 +8,7 @@ const NewBlog = ({ addBlog }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    addBlog(title, author, url);
+    createBlog(title, author, url);
 
     setTitle('');
     setAuthor('');

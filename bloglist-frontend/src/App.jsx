@@ -12,6 +12,8 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
 
+  console.log(user);
+
   const newBlogRef = useRef();
 
   useEffect(() => {
@@ -71,6 +73,29 @@ const App = () => {
     }
   };
 
+  const updateBlog = async (blog) => {
+    const blogToUpdate = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    };
+
+    try {
+      const updatedBlog = await blogService.update(blog.id, blogToUpdate);
+
+      setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
+
+      notify({
+        type: 'success',
+        content: `Blog successfully updated: '${updatedBlog.title}' now has ${updatedBlog.likes} likes!`,
+      });
+    } catch (err) {
+      notify({ type: 'error', content: 'Updated failed' });
+    }
+  };
+
   const notify = (message) => {
     setStatusMessage(message);
 
@@ -95,13 +120,13 @@ const App = () => {
       <button onClick={handleLogout}>Logout</button>
 
       <Togglable buttonLabel="New blog" ref={newBlogRef}>
-        <NewBlog addBlog={addBlog} />
+        <NewBlog createBlog={addBlog} />
       </Togglable>
 
       <br />
       <div>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
         ))}
       </div>
     </div>
