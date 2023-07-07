@@ -12,8 +12,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
 
-  console.log(user);
-
   const newBlogRef = useRef();
 
   useEffect(() => {
@@ -96,6 +94,41 @@ const App = () => {
     }
   };
 
+  const deleteBlog = async (id) => {
+    const blogToDelete = blogs.find((b) => b.id === id);
+
+    if (blogToDelete.author !== user.name) {
+      notify({
+        type: 'error',
+        content: 'Blog can only be deleted by publisher.',
+      });
+
+      return;
+    }
+
+    if (
+      window.confirm(
+        `Are you sure you want to remove '${blogToDelete.title}' by ${blogToDelete.author}?`,
+      )
+    ) {
+      try {
+        blogService.deleteBlog(id);
+
+        setBlogs(blogs.filter((b) => b.id !== id));
+
+        notify({
+          type: 'success',
+          content: 'Successfully deleted',
+        });
+      } catch (err) {
+        notify({
+          type: 'error',
+          content: 'Cannot delete blog',
+        });
+      }
+    }
+  };
+
   const notify = (message) => {
     setStatusMessage(message);
 
@@ -128,7 +161,12 @@ const App = () => {
       <br />
       <div>
         {sortedBlogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            deleteBlog={deleteBlog}
+          />
         ))}
       </div>
     </div>
