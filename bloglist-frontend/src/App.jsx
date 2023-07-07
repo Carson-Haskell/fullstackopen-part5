@@ -112,6 +112,8 @@ const App = () => {
     );
   }
 
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+
   return (
     <div>
       <h2>Blogs</h2>
@@ -125,7 +127,7 @@ const App = () => {
 
       <br />
       <div>
-        {blogs.map((blog) => (
+        {sortedBlogs.map((blog) => (
           <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
         ))}
       </div>
