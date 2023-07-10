@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 
 const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -7,11 +6,11 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
   return (
     <div className="blog">
       {blog.title}
-      <button onClick={() => setShowDetails(!showDetails)}>
+      <button onClick={() => setShowDetails(!showDetails)} id="toggle">
         {showDetails ? 'hide' : 'view'}
       </button>
       {showDetails && (
-        <div>
+        <div className=".togglableContent">
           <p>
             Blog: <a href={blog.url}>{blog.url}</a>
           </p>
@@ -25,12 +24,6 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
       )}
     </div>
   );
-};
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
 };
 
 export default Blog;
