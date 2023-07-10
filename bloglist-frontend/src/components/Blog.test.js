@@ -28,6 +28,7 @@ describe('<Blog />', () => {
 
   test('blog details are shown after clicking button', async () => {
     render(<Blog blog={testBlog} />);
+
     const user = userEvent.setup();
     const button = screen.getByText('view');
     await user.click(button);
@@ -39,5 +40,21 @@ describe('<Blog />', () => {
     expect(url).toBeDefined();
     expect(likes).toBeDefined();
     expect(author).toBeDefined();
+  });
+
+  test('like button calls function correctly', async () => {
+    const mockHandler = jest.fn();
+
+    render(<Blog blog={testBlog} updateBlog={mockHandler} />);
+
+    const user = userEvent.setup();
+    const button = screen.getByText('view');
+    await user.click(button);
+
+    const likeButton = screen.getByText('Like');
+    await user.click(likeButton);
+    await user.click(likeButton);
+
+    expect(mockHandler.mock.calls).toHaveLength(2);
   });
 });
