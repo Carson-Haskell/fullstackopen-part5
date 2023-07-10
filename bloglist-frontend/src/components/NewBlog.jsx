@@ -17,7 +17,7 @@ const NewBlog = ({ createBlog }) => {
   };
 
   return (
-    <div>
+    <div className="formDiv">
       <h2>Upload new blog</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -27,6 +27,8 @@ const NewBlog = ({ createBlog }) => {
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            id="title"
+            placeholder="React Beginners Guide..."
           />
         </div>
         <div>
@@ -36,6 +38,8 @@ const NewBlog = ({ createBlog }) => {
             name="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
+            id="author"
+            placeholder="John Smith..."
           />
         </div>
         <div>
@@ -45,6 +49,8 @@ const NewBlog = ({ createBlog }) => {
             name="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
+            id="url"
+            placeholder="www.yourblog.com..."
           />
         </div>
         <button>Create</button>
